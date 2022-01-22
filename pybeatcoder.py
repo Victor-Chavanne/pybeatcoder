@@ -1,4 +1,5 @@
 import sys
+from os.path import exists
 import pygments
 from pygments.lexers import PythonLexer
 from mido import Message, MidiFile, MidiTrack
@@ -71,7 +72,11 @@ def main(input_file, output_file):
     mid.save(output_file)
 
 def print_help():
-    print("""Usage: pybeatcoder [INPUT FILE] [OUTPUT FILE]""")
+    print("""Usage: pybeatcoder [INPUT FILE] [OUTPUT FILE]
+    Convert a source code file into a midi file
+    
+        -h, --help      display this help and exit
+        -p, --print     print the midi messages of a .mid file""")
 
 def print_midi(midi_file):
     mid = MidiFile(midi_file)
@@ -81,11 +86,14 @@ def print_midi(midi_file):
             print(msg)
 
 if __name__ == '__main__':
-    if len(sys.argv)==2:
+    if len(sys.argv) == 3 :
         if sys.argv[1] in ["-h", "--help"]:
             print_help()
-    else :
-        if sys.argv[1] in ["-p", "--print"]:
+        elif sys.argv[1] in ["-p", "--print"]:
             print_midi(sys.argv[2])
-        else:
+        elif exists(sys.argv[1]):
             main(sys.argv[1], sys.argv[2])
+        else:
+            print_help()
+    else:
+        print_help()
