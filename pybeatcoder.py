@@ -38,11 +38,12 @@ def generate_note(token):
 
 def generate_bass_track(token_list, scale):
     track = MidiTrack()
-    track.append(Message('program_change', program=12, time=0))
-    for token in token_list:
-        note = generate_note(token)
-        track.append(Message('note_on', channel=0, note=scale[note], velocity=64, time=0))
-        track.append(Message('note_off', note=scale[note], velocity=127, time=64))
+
+    for line in token_list:
+        for token in line:
+            note = generate_note(token)
+            track.append(Message('note_on', channel=0, note=scale[note], velocity=64, time=0))
+            track.append(Message('note_off', note=scale[note], velocity=127, time=64))
     return track
 
 def generate_token_notes(token_line):
@@ -51,12 +52,15 @@ def generate_token_notes(token_line):
         pass
 
 def main(input_file, output_file):
-    # Temp line of code for testing
-    temp_code = "from pygments.lexers import PythonLexer"
+    # Get lines of code in a list
+    code = []
+    with open(input_file, "r") as inp:
+        for line in inp.read().splitlines():
+            code.append(line)
 
-    # Iterate over tokens
+    # Iterate over lines to get the tokens
     pl = PythonLexer()
-    tokens_list = [x for x in pygments.lex(temp_code, pl)]
+    tokens_list = [[x for x in pygments.lex(line, pl)] for line in code]
 
     # generate scale
     scale = generate_scale(input_file)
