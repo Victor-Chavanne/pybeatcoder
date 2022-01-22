@@ -73,10 +73,10 @@ def main(input_file, output_file):
 
 def print_help():
     print("""Usage: pybeatcoder [INPUT FILE] [OUTPUT FILE]
-    Convert a source code file into a midi file
+Converts a source code file into a midi file
     
-        -h, --help      display this help and exit
-        -p, --print     print the midi messages of a .mid file""")
+    -h, --help      display this help and exit
+    -p, --print     print the midi messages of a .mid file""")
 
 def print_midi(midi_file):
     mid = MidiFile(midi_file)
